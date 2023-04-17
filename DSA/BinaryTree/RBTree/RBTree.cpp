@@ -243,6 +243,29 @@ private:
         x->color = 0;
     }
 
+    void printHelper(NodePtr root, string indent, bool last)
+    {
+        if (root != TNULL)
+        {
+            cout << indent;
+            if (last)
+            {
+                cout << "R----";
+                indent += "   ";
+            }
+            else
+            {
+                cout << "L----";
+                indent += "|  ";
+            }
+
+            string sColor = root->color ? "RED" : "BLACK";
+            cout << root->data << "(" << sColor << ")" << endl;
+            printHelper(root->left, indent, false);
+            printHelper(root->right, indent, true);
+        }
+    }
+
 public:
     RBTree()
     {
@@ -332,43 +355,23 @@ public:
             y = minimum(z->right);
         }
         z->data = y->data;
-        z = y;
 
         // 3. 删除修正
         deleteFix(y);
         // 修正完后删除这个节点
-        if (y->data < y->parent->data){
+        if (y->data < y->parent->data)
+        {
             y->parent->left = TNULL;
         }
-        else{
+        else
+        {
             y->parent->right = TNULL;
         }
+        // 释放指针
+        z = y;
         delete y;
         y = NULL;
         z = NULL;
-    }
-
-    void printHelper(NodePtr root, string indent, bool last)
-    {
-        if (root != TNULL)
-        {
-            cout << indent;
-            if (last)
-            {
-                cout << "R----";
-                indent += "   ";
-            }
-            else
-            {
-                cout << "L----";
-                indent += "|  ";
-            }
-
-            string sColor = root->color ? "RED" : "BLACK";
-            cout << root->data << "(" << sColor << ")" << endl;
-            printHelper(root->left, indent, false);
-            printHelper(root->right, indent, true);
-        }
     }
 
     void printTree()
